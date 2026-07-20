@@ -597,3 +597,739 @@ git notes remove <commit-hash>
 # 推送注释到远程仓库
 git push origin refs/notes/*
 ```
+
+### 分支管理
+
+使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作，一条分支代表一条独立的开发线
+
+####  创建新分支并切换到该分支：
+
+```
+git checkout -b <branchname>
+```
+
+#### 切换分支命令:
+
+##### git check out
+
+用于在不同的分支之间切换、恢复文件、创建新分支等操作。
+
+```shell
+git checkout <branch-name> #（从当前分支切换到指定分支）
+git checkout -b <new-branch-name> #（创建新分支并切换）
+git checkout - #（切换到前一个分支）
+git checkout <commit> -- <file> #（将指定文件恢复到某次提交时的状态，丢弃未提交的更改）
+git checkout <commit-hash> #（切换到指定提交）
+git checkout tags/<tag-name> #（如果你有一个标签 <tag-name>，你可以使用这个命令来切换到该标签所指向的提交状态。）
+```
+
+##### git switch
+
+作用与 [git checkout](https://www.runoob.com/git/git-checkout.html) 类似，但提供了更清晰的语义和错误检查。
+
+```shell
+git switch <branch-name> #（从当前分支切换到指定的分支 <branch-name>）
+git switch -c <new-branch-name> #（创建新分支并切换到该分支）
+git switch - #（切换到前一个分支）
+git switch <commit_hash> #（恢复工作目录到某个特定的提交状态）
+git switch -d #（使切换到某个提交的操作更明确，即使存在同名分支也不会切换到分支上。）
+git switch -f #（强制执行切换，即使有更改未提交）
+git branch #（列出可用的本地分支和标签，便于选择切换目标）
+```
+
+当你切换分支的时候，Git 会用该分支的最后提交的快照替换你的工作目录的内容， 所以多个分支不需要多个目录。
+
+#### 查看分支
+
+##### 查看所有分支：
+
+```
+git branch
+```
+
+##### 查看远程分支：
+
+```
+git branch -r
+```
+
+##### 查看所有本地和远程分支：
+
+```
+git branch -a
+```
+
+#### 合并分支
+
+将其他分支合并到当前分支：
+
+```
+git merge <branchname>
+```
+
+例如，切换到 main 分支并合并 feature-xyz 分支：
+
+```
+git checkout main
+git merge feature-xyz
+```
+
+#### 解决合并冲突
+
+当合并过程中出现冲突时，Git 会标记冲突文件，你需要手动解决冲突。
+
+打开冲突文件，按照标记解决冲突。
+
+标记冲突解决完成：
+
+```
+git add <conflict-file>
+```
+
+提交合并结果：
+
+```
+git commit
+```
+
+#### 删除分支
+
+删除本地分支：
+
+```
+git branch -d <branchname>
+```
+
+强制删除未合并的分支：
+
+```
+git branch -D <branchname>
+```
+
+删除远程分支：
+
+```
+git push origin --delete <branchname>
+```
+
+如果我们要手动创建一个分支。执行 **git branch (branchname)** 即可，当你以此方式在上次提交更新之后创建了新分支，如果后来又有更新提交， 然后又切换到了 **testing** 分支，Git 将还原你的工作目录到你创建分支时候的样子。
+
+### 远程操作
+
+#### 管理git中的远程仓库 git remote
+
+- `git remote`：列出当前仓库中已配置的远程仓库。
+- `git remote -v`：列出当前仓库中已配置的远程仓库，并显示它们的 URL。
+- `git remote add <remote_name> <remote_url>`：添加一个新的远程仓库。指定一个远程仓库的名称和 URL，将其添加到当前仓库中。
+- `git remote rename <old_name> <new_name>`：将已配置的远程仓库重命名。
+- `git remote remove <remote_name>`：从当前仓库中删除指定的远程仓库。
+- `git remote set-url <remote_name> <new_url>`：修改指定远程仓库的 URL。
+- `git remote show <remote_name>`：显示指定远程仓库的详细信息，包括 URL 和跟踪分支。
+
+#### 从远程仓库获取代码库 git fetch
+
+用于从远程获取代码库，执行`git fetch` 后 执行`git merge` 合并
+
+```
+git fetch origin
+git merge origin/master
+```
+
+#### 远程获取代码并合并本地的版本 git pull
+
+用于从远程获取代码并**合并本地**的版本,为`git fetch` 和`git merge` 合并
+
+```
+git pull [远程仓库名] [分支名]
+```
+
+- `[远程仓库名]` 通常是 `origin`，是默认的远程仓库名。
+- `[分支名]` 是你要合并的远程分支，比如 `main` 或 `master`。
+
+#### 将本地版本上传到远程仓库并合并 git push
+
+命令格式如下：
+
+```
+git push <远程主机名> <本地分支名>:<远程分支名>
+```
+
+如果本地分支名与远程分支名相同，则可以省略冒号：
+
+```
+git push <远程主机名> <本地分支名>
+```
+
+如果本地版本与远程版本有差异，但又要强制推送可以使用 --force 参数：
+
+```
+git push --force origin master
+```
+
+删除主机的分支可以使用 --delete 参数，以下命令表示删除 origin 主机的 master 分支：
+
+```
+git push origin --delete master
+```
+
+### 提交日志
+
+#### 显示从最新提交到最早提交的所有信息 git log
+
+it log** 显示了从最新提交到最早提交的所有提交信息，包括提交的哈希值、作者、提交日期和提交消息等。
+
+```
+git log [选项] [分支名/提交哈希]
+```
+
+- `-p`：显示提交的补丁（具体更改内容）。
+- `--oneline`：以简洁的一行格式显示提交信息。
+- `--graph`：以图形化方式显示分支和合并历史。
+- `--decorate`：显示分支和标签指向的提交。
+- `--author=<作者>`：只显示特定作者的提交。
+- `--since=<时间>`：只显示指定时间之后的提交。
+- `--until=<时间>`：只显示指定时间之前的提交。
+- `--grep=<模式>`：只显示包含指定模式的提交消息。
+- `--no-merges`：不显示合并提交。
+- `--stat`：显示简略统计信息，包括修改的文件和行数。
+- `--abbrev-commit`：使用短提交哈希值。
+- `--pretty=<格式>`：使用自定义的提交信息显示格式。
+
+#####  常用选项
+
+限制显示的提交数:
+
+```
+git log -n <number>
+```
+
+以一行格式显示提交信息
+
+```
+git log --oneline
+```
+
+显示自指定日期之后的提交：
+
+```
+git log --since="2024-01-01"
+```
+
+显示指定日期之前的提交：
+
+```
+git log --until="2024-07-01"
+```
+
+只显示某个作者的提交：
+
+```
+git log --author="Author Name"
+```
+
+#### 通过作者进行分类的查看历史汇总 git shortlog
+
+总结 Git 仓库的提交历史，提供对每位作者的提交计数以及每个提交类别的概览。
+
+```
+git shortlog [<options>] [<revision-range>]
+```
+
+- **`<revision-range>`**：指定要生成摘要的提交范围，默认为当前分支的全部提交。
+
+- **`<options>`**：用于定制输出格式或行为的选项。
+
+**常用选项和用法：**
+
+| **选项**                  | **说明**                                                     | **用法示例**                               |
+| :------------------------ | :----------------------------------------------------------- | :----------------------------------------- |
+| **`-n` 或 `--numbered`**  | **按提交数量对作者进行排序，显示每个作者的提交数量。**       | **`git shortlog -n`**                      |
+| **`-s` 或 `--summary`**   | **仅显示作者及其提交数量，不显示提交信息。**                 | **`git shortlog -s`**                      |
+| **`-e` 或 `--email`**     | **显示作者的电子邮件地址。**                                 | **`git shortlog -e`**                      |
+| **`-c` 或 `--committer`** | **按提交者（committer）统计提交数量，而不是作者（author）。** | **`git shortlog -c**`                      |
+| `-a` 或 `--all`           | 包括所有作者（包括那些没有任何提交的作者）。                 | `git shortlog -a`                          |
+| **`--no-merges`**         | **排除合并提交，只显示非合并提交的摘要。**                   | **`git shortlog --no-merges`**             |
+| **`--pretty`**            | **自定义输出格式。**                                         | **`git shortlog --pretty=format:"%h %s"`** |
+| **`--since`**             | **仅显示指定时间范围内的提交。**                             | **`git shortlog --since="2023-01-01"`**    |
+| `--until`                 | 仅显示指定时间之前的提交。                                   | `git shortlog --until="2023-01-01"`        |
+| `--reverse`               | 逆序显示提交摘要，按作者提交数量的升序排列。                 | `git shortlog --reverse`                   |
+
+#### 追踪每一行的变更历史 git blame
+
+ 可以追踪文件中每一行的变更历史，包括作者、提交哈希、提交日期和提交消息等信息。
+
+```
+git blame [选项] <文件路径>
+```
+
+- `-L <起始行号>,<结束行号>`：只显示指定行号范围内的代码注释。
+- `-C`：对于重命名或拷贝的代码行，也进行代码行溯源。
+- `-M`：对于移动的代码行，也进行代码行溯源。
+- `-C -C` 或 `-M -M`：对于较多改动的代码行，进行更进一步的溯源。
+- `--show-stats`：显示包含每个作者的行数统计信息。
+
+##### 确定文件路径 使用`git ls-files` 指令
+
+```
+git ls-files
+```
+
+例如输出：
+
+```
+README.md
+css/style.css
+js/main.js
+src/App.java
+```
+
+然后直接把对应路径作为 `git blame` 的参数：
+
+```
+git blame src/App.java
+```
+
+#### 生成版本号 git describe
+
+`git describe` 命令命令通常用于生成版本号，帮助识别特定的提交，并能够在构建、发布或追踪特定版本时使用。
+
+### 基本语法
+
+```
+git describe [<options>] [<commit>]
+```
+
+- **`<commit>`**：指定要描述的提交。默认为当前提交。
+- **`<options>`**：用于定制输出格式或行为的选项。
+
+| **选项**                | **说明**                                                     | **用法示例**                  |
+| :---------------------- | :----------------------------------------------------------- | :---------------------------- |
+| **`--tags`**            | **使用所有标签（包括轻量标签）来生成描述。默认情况下，`git describe` 只考虑附注标签。** | `git describe --tags`         |
+| `--abbrev=<n>`          | 设定要显示的提交哈希的最小长度为 `<n>` 个字符。              | `git describe --abbrev=8`     |
+| **`--long`**            | **强制显示长格式的描述，包括提交的哈希和距离标签的提交数。** | `git describe --long`         |
+| **`--exact-match`**     | **仅在当前提交与标签完全匹配时返回标签名称。**               | `git describe --exact-match`  |
+| **`--dirty`**           | **如果工作目录有更改（未提交的更改），则在描述中添加 `-dirty` 后缀。** | `git describe --dirty`        |
+| **`--match=<pattern>`** | **仅使用符合指定模式的标签进行描述。**                       | `git describe --match "v1.*"` |
+| `--candidates=<n>`      | 限制描述所考虑的标签数量，默认为 10 个。                     | `git describe --candidates=5` |
+| **--always`**           | **即使没有找到标签，也会显示提交的哈希。**                   | `git describe --always`       |
+
+### 回退版本
+
+####  恢复工作区和暂存区文件 ： git restore
+
+> 与 `git checkout` 恢复文件时功能一样
+
+用于恢复或撤销文件的更改，可以恢复工作区和暂存区中的文件，也可以用于丢弃未提交的更改，不能撤销提交。
+
+```
+git restore [<options>] [<pathspec>...]
+```
+
+- **`<pathspec>`**：要恢复的文件或目录路径。
+- **`<options>`**：用于定制恢复行为的选项
+
+**常用选项和用法**
+
+| **选项**             | **说明**                                                     | **用法示例**                            |
+| :------------------- | :----------------------------------------------------------- | :-------------------------------------- |
+| `--source=<commit>`  | 从指定的提交中恢复文件内容。默认为 HEAD，即当前提交。        | `git restore --source=HEAD~1 file.txt`  |
+| `--staged`           | 恢复暂存区中的文件内容到工作区，而不是恢复工作区中的内容。   | `git restore --staged file.txt`         |
+| `--worktree`         | 恢复工作区中的文件内容到当前工作区状态。                     | `git restore --worktree file.txt`       |
+| `--ours`             | 在合并冲突时，恢复为当前分支的版本（即"我们"的版本）。       | `git restore --ours file.txt`           |
+| `--theirs`           | 在合并冲突时，恢复为另一个分支的版本（即"他们"的版本）。     | `git restore --theirs file.txt`         |
+| `--conflict=<style>` | 指定合并冲突的样式，例如 `merge` 或 `diff3`。                | `git restore --conflict=diff3 file.txt` |
+| `--dry-run`          | 显示将要恢复的文件和路径，而不实际进行恢复。                 | `git restore --dry-run`                 |
+| `-s`, `--source`     | 与 `--source` 相同，用于从指定提交中恢复文件。               | `git restore -s HEAD~1 file.txt`        |
+| `-W`, `--worktree`   | 恢复工作区中的文件内容到当前工作区状态（与 `--worktree` 相同）。 | `git restore -W file.txt`               |
+| `-S`, `--staged`     | 恢复暂存区中的文件内容到工作区，而不是恢复工作区中的内容（与 `--staged` 相同）。 | `git restore -S file.txt`               |
+
+#### 重置当前分支到特定提交 git reset
+
+git reset 命令可以更改当前分支的提交历史，它有三种主要模式：--soft、--mixed 和 --hard。
+
+**--soft**：只撤销某次提交，暂存区和工作区保持不变，文件还是暂存状态。
+
+```
+git reset --soft <commit>
+```
+
+**使用场景：**
+
+- commit 信息写错了
+- 想撤销最近一次提交后重新提交
+- 想保留已经 `git add` 的内容
+
+**--mixed（默认）**：撤销某次提交，同时暂存区重置，文件未暂存，但工作区保持不变。
+
+```
+git reset --mixed <commit>
+```
+
+**使用场景：**
+
+- 想撤销 commit
+- 也想撤销 `git add`
+- 但不想丢失代码修改
+
+**--hard**：撤销某次提交，暂存区和工作区都重置。
+
+```
+git reset --hard <commit>
+```
+
+**使用场景：**
+
+- 本地修改和提交都不要了
+- 想彻底恢复到某个稳定版本
+- 实验代码全部丢弃
+
+例如，将当前分支重置到 abc123 提交：
+
+```
+git reset --hard abc123
+```
+
+| 命令                | 是否移动 HEAD | 是否改暂存区 | 是否改工作区 | 说明                        |
+| ------------------- | ------------- | ------------ | ------------ | --------------------------- |
+| `git reset --soft`  | 是            | 否           | 否           | 撤销 commit，保留暂存区内容 |
+| `git reset --mixed` | 是            | 是           | 否           | 撤销 commit 和暂存区        |
+| `git reset --hard`  | 是            | 是           | 是           | 彻底回退，工作区也恢复      |
+
+###### reset 的使用建议
+
+| 场景                  | 是否推荐 |
+| --------------------- | -------- |
+| 本地提交，还没 push   | 推荐     |
+| 已经 push，只有自己用 | 谨慎使用 |
+| 已经 push，多人协作   | 不推荐   |
+
+**原因：**
+
+`git reset` 会改写历史。  
+如果已经 push 到远程，尤其是多人协作分支，不建议随意使用后再强推。
+
+#### 撤销某次提交但不改变提交历史 git revert
+
+git revert 命令创建一个新的提交，用来撤销指定的提交，它不会改变提交历史，适用于已经推送到远程仓库的提交。
+
+```
+git revert <commit>
+```
+
+例如，撤销 abc123 提交：
+
+```
+git revert abc123
+```
+
+###### revert 的效果
+
+1. 例如历史：
+
+
+```bash
+A --- B --- C
+```
+
+执行：
+
+```bash
+git revert C
+```
+
+会变成：
+
+```bash
+A --- B --- C --- D
+```
+
+其中：
+
+- `C` 还在
+- `D` 是新的反向提交
+- 最终代码效果等于撤销了 `C`，文件内容和上一个`A-B`版本一样，但提交历史不同
+
+2.假如历史为
+
+```
+A --- B --- C --- D
+```
+
+执行
+
+```
+git revert C
+```
+
+会变成
+
+```
+A --- B --- C --- D --- E
+```
+
+那么此时文件内容是什么呢
+
+第一种情况是==D提交时没有对C修改==，那么`git` 就可以自动撤销C
+
+例如：
+
+```
+B
+name=Tom
+age=18
+```
+
+C 修改：
+
+```
+name=Jerry
+age=18
+```
+
+D 新增一行：
+
+```
+name=Jerry
+age=18
+city=Beijing
+```
+
+撤销 C 后：
+
+```
+name=Tom
+age=18
+city=Beijing
+```
+
+没有冲突。
+
+第二种情况是D对C修改了，那么此时就不能自动撤销，会产生冲突 需要手动解决
+
+如果 D 也修改了 C 修改过的位置，例如：
+
+```
+B
+hello
+C
+hello world
+D
+hello git
+```
+
+现在撤销 C。
+
+Git想把：
+
+```
+hello world
+```
+
+恢复成
+
+```
+hello
+```
+
+可是当前已经变成
+
+```
+hello git
+```
+
+Git不知道到底应该变成什么，于是会提示：
+
+```
+CONFLICT (content): Merge conflict
+```
+
+需要你手动解决冲突。
+
+#### 查看历史操作记录 git reflog
+
+git reflog 命令记录了所有 HEAD 的移动。即使提交被删除或重置，也可以通过 reflog 找回。
+
+```
+git reflog
+```
+
+例如：
+
+```
+git reset --hard HEAD~2
+```
+
+结果发现：
+
+> 完了，删错了！
+
+这时：
+
+```
+git reflog
+```
+
+可能看到：
+
+```
+8d3fae1 HEAD@{0}: reset: moving to HEAD~2
+91b2c4d HEAD@{1}: commit: fix bug
+3af5e77 HEAD@{2}: commit: add login
+```
+
+想恢复到 `fix bug`：
+
+```
+git reset --hard 91b2c4d
+```
+
+或者：
+
+```
+git reset --hard HEAD@{1}
+```
+
+`HEAD@{0}`：当前HEAD
+
+`HEAD@{1}`：上一次HEAD所在位置
+
+`HEAD@{2}`：上上次HEAD所在位置
+
+####  reset、revert、reflog  reestore 对比
+
+| 对比项               | git reset | git revert | git reflog     | git restore            |
+| -------------------- | --------- | ---------- | -------------- | ---------------------- |
+| 是否回退代码         | 是        | 是         | 否             | 是                     |
+| 是否改写历史         | 是        | 否         | 否             | 否                     |
+| 是否新增提交         | 否        | 是         | 否             | 否                     |
+| 是否适合已 push 提交 | 不推荐    | 推荐       | 用于补救       | 否                     |
+| 是否适合多人协作     | 谨慎使用  | 适合       | 补救工具       | 可以                   |
+| 核心作用             | 移动 HEAD | 反向提交   | 查看 HEAD 历史 | 恢复本地仓库的文件内容 |
+
+#####  常见使用情况总结
+
+######  本地提交信息写错了，还没 push
+
+推荐：
+
+```bash
+git reset --soft HEAD~1
+git commit -m "新的提交说明"
+```
+
+---
+
+###### 本地提交想撤销，但代码保留
+
+推荐：
+
+```bash
+git reset HEAD~1
+```
+
+或者：
+
+```bash
+git reset --mixed HEAD~1
+```
+
+---
+
+######  本地提交和代码都不要了
+
+推荐：
+
+```bash
+git reset --hard HEAD~1
+```
+
+---
+
+######  已经 push 到远程，想安全撤销某次提交
+
+推荐：
+
+```bash
+git revert <提交ID>
+git push origin <分支名>
+```
+
+---
+
+######  reset 错了，想找回来
+
+推荐：
+
+```bash
+git reflog
+git reset --hard <提交ID>
+```
+
+
+
+
+
+
+
+
+
+
+
+### git 文件状态
+
+**文件状态分为三种**：工作目录（Working Directory）、暂存区（Staging Area）、本地仓库（Local Repository）。
+
+#### 工作目录
+
+为在计算机上可以看到的项目文件，是实际操作文件的地方，包括查看，编辑，删除和创建文件，对文件的更改都在工作目录中
+
+工作目录中的文件两种状态
+
+- **未跟踪（Untracked）**：新创建的文件，未被 Git 记录。
+- **已修改（Modified）**：已被 Git 跟踪的文件发生了更改，但这些更改还没有被提交到 Git 记录中。
+
+#### 暂存区
+
+保存提交到本地仓库中的更改
+
+```
+git add <filename>  # 添加指定文件到暂存区
+git add .           # 添加所有更改到暂存区
+```
+
+#### 本地仓库
+
+本地仓库是一个隐藏在 `.git` 目录中的数据库，用于存储项目的所有提交历史记录。每次你提交更改时，Git 会将暂存区中的内容保存到本地仓库中。
+
+使用 `git commit -m "commit message"` 命令将暂存区中的更改提交到本地仓库。
+
+```
+git commit -m "commit message"  # 提交暂存区的更改到本地仓库
+```
+
+### 文件状态的转换
+
+#### **未跟踪（Untracked）**
+
+ 新创建的文件最初是未跟踪的。它们存在于工作目录中，但没有被 Git 跟踪。新建文件后没有任何操作就是未跟踪
+
+#### **已跟踪（Tracked）**
+
+通过 `git add` 命令将未跟踪的文件添加到暂存区后，文件变为已跟踪状态。
+
+#### **已修改（Modified）**
+
+ 对已跟踪的文件进行更改后，这些更改会显示为已修改状态，但这些更改还未添加到暂存区。
+
+```
+echo "Hello, World!" > newfile.txt  # 修改文件
+git status                          # 查看状态，显示 newfile.txt 已修改
+```
+
+#### **已暂存（Staged）**
+
+使用 `git add` 命令将修改过的文件添加到暂存区后，文件进入已暂存状态，等待提交。
+
+#### **已提交（Committed）**
+
+使用 `git commit` 命令将暂存区的更改提交到本地仓库后，这些更改被记录下来，文件状态返回为已跟踪状态。
