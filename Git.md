@@ -547,7 +547,7 @@ git notes <subcommand> [options] [arguments]
 
 - **`<commit-hash>`**：指定要添加注释的提交（可选，默认为当前提交）。
 
-	```
+	```shell
 	# 添加注释到当前提交
 	git notes add -m "This commit fixes the login bug"
 	
@@ -557,9 +557,17 @@ git notes <subcommand> [options] [arguments]
 
 #####  2.git notes show
 
-**显示提交的注释。**
+**显示最新提交的注释。**
 
 - **`<commit-hash>`**：指定要显示注释的提交（可选，默认为当前提交）。
+
+	```shell
+	# 查看当前提交的注释
+	git notes show
+	
+	# 查看特定提交的注释
+	git notes show <commit-hash>
+	```
 
 ##### 3.git notes list
 
