@@ -341,21 +341,21 @@ git add -all #（暂存整个仓库所有已跟踪和未跟踪文件的变更，
 - 未暂存的修改：显示已修改但尚未使用 `git add` 添加到暂存区的文件列表。
 - 未跟踪的文件：显示尚未纳入版本控制的新文件列表。
 
-1. 使用 **-s** 参数来获得简短的输出结果：
+1. 使用 **-s** 参数来获得**简短的输出结果**：
 
-```
+```shell
 $ git status -s
 AM README
 A  hello.php
 ```
 
-2.使用 -b 显示当前分支信息
+2.使用 -b 显示**当前分支信息**
 
-3.--ignored ： 显示被忽略的文件
+3.`--ignored` ： 显示被忽略的文件
 
-4.--untracked-files=<mode> ： 控制未跟踪文件的显示方式
+4.`--untracked-files=<mode>` ： 控制未跟踪文件的显示方式
 
-```
+```shell
 git status -s -- git/typora笔记（指定路径）
 ```
 
@@ -373,12 +373,47 @@ git status -s -- git/typora笔记（指定路径）
 `?` 表示未跟踪文件。
 `!` 表示忽略文件。
 
-#### 查看修改内容 git diff
+```shell
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   Git.md #此时使用 git status 可以看到Git.md文件修改了
+```
 
-git diff 命令显示已写入暂存区和已经被修改但尚未写入暂存区文件的区别，即比较文件在暂存区与工作区的差异
+<img src="https://cdn.jsdelivr.net/gh/sakskadjas-a11y/note@master/image/image.Git.3.png" style="zoom:150%;" />
+
+
+
+在修改后没有放到暂存区时候即没有执行 `git add`，第一列是红色的M，执行 `git add`后变成绿色的M
+
+
+
+####  查看修改内容 git diff
+
+ git diff 命令显示已写入暂存区和已经被修改但尚未写入暂存区文件的区别，即比较文件在暂存区与工作区的差异
 
 - 尚未缓存的改动：**git diff**
 - 查看已缓存的改动： **git diff --cached****（或git diff – staged)（最后一次提交到版本库中的文件和暂存区中文件的修改对比）
 - 查看已缓存的与未缓存的所有改动：**git diff HEAD**（已经提交到版本库中的文件和未提交到版本库中的文件的所有修改对比）
 - 显示摘要而非整个 diff：**git diff --stat**
+
+使用`git diff` 之后可以看到具体修改内容
+
+```shell
++这里新增内容1   #加号后面是较原来add 存储区版本多的内容
+-这里新增内容1   #减号后面是较原来add 存储区版本少的内容
+```
+
+**git diff内容查阅操作**
+
+| `q`       | 退出               |
+| --------- | ------------------ |
+| `空格`    | 向下翻一页         |
+| `b`       | 向上翻一页         |
+| `回车`    | 向下滚动一行       |
+| `↑` / `↓` | 上下移动           |
+| `/关键词` | 搜索关键词         |
+| `n`       | 跳到下一个搜索结果 |
+| `N`       | 跳到上一个搜索结果 |
 
