@@ -302,7 +302,7 @@ git clone <repo> <directory>
 $ git clone git://github.com/schacon/grit.git
 ```
 
-执行该命令后，会在当前目录下创建一个名为grit的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录。
+执行该命令后，会在当前目录下创建一个名为`grit`的目录，其中包含一个 .git 的目录，用于保存下载下来的所有版本记录。
 
 如果要**自己定义要新建的项目目录名称**，可以在上面的命令末尾指定新的名字
 
@@ -317,6 +317,77 @@ git clone -b dev --single-branch https://github.com/user/demo.git
 ```
 
 此时只克隆了dev分支
+
+**只克隆目标文件**
+
+```
+git clone <URL> --depth 1
+```
+
+`depth`可以控制克隆深度，`depth`为1即只克隆远程仓库文件及最近一次的提交记录，但是此时只会克隆远程仓库的main分支，
+
+如果想看历史提交记录可以使用以下命令
+
+```
+git pull --unshallow
+```
+
+此时就可以pull 历史的commit
+
+## 关联githugb仓库
+
+首先要创建`SSH`密钥，使用以下命令生成`SSH key` ，在终端中输入以下命令
+
+```
+ssh-keygen -t rsa -C "youremail@example.com"
+```
+
+> 后面的 **your_email@youremail.com** 改为你在 Github 上注册的邮箱
+
+之后终端会问你几个问题，全部按`Enter`接受默认值即可
+
+- `Enter file in which to save the key...`：直接按 `Enter`。
+- `Enter passphrase...`：直接按 `Enter` (不需要密码)。
+- `Enter same passphrase again...`：再次按 `Enter`。
+
+指令完成后，画面上会告诉你公钥存储的路径，例如 `/home/你的用户名/.ssh/id_rsa.pub` 或 `id_ed25519.pub`
+
+钥匙有分公钥 (可以给别人) 和私钥 (绝对要自己保管好)。我们要将“公钥”复制到 GitHub。
+
+在终端机输入以下指令来显示公钥内容。请注意，文件名可能是 `id_rsa.pub` 或 `id_ed25519.pub`，这取决于系统默认值，两个都可以。
+
+```shell
+cat ~/.ssh/id_rsa.pub
+```
+
+**完整复制**画面上出现的所有内容，它应该是以 `ssh-rsa` 或 `ssh-ed25519` 开头。
+
+前往 GitHub 网站，登录你的账号。
+
+点击右上角的个人头像，选择 **Settings**。
+
+在左边的菜单中，找到并点击 **SSH and GPG keys**。
+
+点击绿色的 **New SSH key** 按钮。
+
+**Title**：给这个钥匙取一个好记的名字，例如 `My Ubuntu VM`。
+
+**Key**：将你刚刚复制的公钥内容，完整地粘贴到这个栏位。
+
+最后点击 **Add SSH key**。
+
+完成SSH KEY创建后接着创建Github仓库，在右上角找到“Create a new repo”按钮，创建一个新的仓库,在Repository name填入`你的仓库名词`，这里我叫做`notebooktemp`其他保持默认设置，点击“Create repository”按钮，就成功地创建了一个新的Git仓库：
+
+目前，在GitHub上的这个仓库还是空的，GitHub告诉我们，可以从这个仓库克隆出新的仓库，也可以把一个已有的本地仓库与之关联，然后，把本地仓库的内容推送到GitHub仓库。
+
+第一次提交到github远程仓库必须使用
+
+```shell
+git remote add origin <URL> #origin为远程仓库名，URL为仓库地址
+git push -u origin master #origin为你远程仓库名，master为当前本地仓库分支名
+```
+
+之后就成功上传了文件到远程仓库
 
 ## 基本操作
 
@@ -889,9 +960,9 @@ src/App.java
 git blame src/App.java
 ```
 
-#### 生成版本号 git describe
+#### 生成版本号 git describe 
 
-`git describe` 命令命令通常用于生成版本号，帮助识别特定的提交，并能够在构建、发布或追踪特定版本时使用。
+`git describe` 命令命令通常用于生成版本号，帮助识别特定的提交，并能够在构建、发布或追踪特定版本时使用，一般是有标签之后才能使用。
 
 ### 基本语法
 
@@ -1265,21 +1336,79 @@ git reflog
 git reset --hard <提交ID>
 ```
 
+### 标签
 
+如果你达到一个重要的阶段，并希望永远记住提交的快照，你可以使用 **git tag** 给它打上标签。Git 标签（Tag）用于给仓库中的特定提交点加上标记。比如说，我们想为我们的项目发布一个 "1.0" 版本，我们可以用 **git tag -a v1.0** 命令给最新一次提交打上（HEAD） "v1.0" 的标签。-a 选项意为"**创建一个带注解的标签**"，不用 -a选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解，我们推荐一直创建带注解的标签。
 
+#### 标签语法格式
 
+```
+git tag <tagname>（使用该命令为轻量标签）
+```
 
+**-a** 选项可以添加注解：
 
+```
+$ git tag -a v1.0 （标签为附注标签）
+```
 
+####  推送标签到远程仓库
 
+默认情况下，git push 不会推送标签，你需要显式地推送标签。
 
+```
+git push origin <tagname>
+```
 
+推送所有标签：
 
-### git 文件状态
+```
+git push origin --tags
+```
+
+####  删除标签
+
+轻量标签为只有哈希值，无其他信息
+
+本地删除：
+
+```
+git tag -d <tagname>
+```
+
+远程删除：
+
+```
+git push origin --delete <tagname>
+```
+
+####  附注标签
+
+附注标签存储了创建者的名字、电子邮件、日期，并且可以包含标签信息。附注标签更为正式，适用于需要额外元数据的场景。
+
+创建附注标签语法：
+
+```
+git tag -a <tagname> -m "message"
+```
+
+PGP 签名标签命令：
+
+```
+git tag -s <tagname> -m "runoob.com标签"
+```
+
+查看标签信息：
+
+```
+git show <tagname>
+```
+
+## git 文件状态
 
 **文件状态分为三种**：工作目录（Working Directory）、暂存区（Staging Area）、本地仓库（Local Repository）。
 
-#### 工作目录
+### 工作目录
 
 为在计算机上可以看到的项目文件，是实际操作文件的地方，包括查看，编辑，删除和创建文件，对文件的更改都在工作目录中
 
@@ -1288,7 +1417,7 @@ git reset --hard <提交ID>
 - **未跟踪（Untracked）**：新创建的文件，未被 Git 记录。
 - **已修改（Modified）**：已被 Git 跟踪的文件发生了更改，但这些更改还没有被提交到 Git 记录中。
 
-#### 暂存区
+### 暂存区
 
 保存提交到本地仓库中的更改
 
@@ -1297,7 +1426,7 @@ git add <filename>  # 添加指定文件到暂存区
 git add .           # 添加所有更改到暂存区
 ```
 
-#### 本地仓库
+### 本地仓库
 
 本地仓库是一个隐藏在 `.git` 目录中的数据库，用于存储项目的所有提交历史记录。每次你提交更改时，Git 会将暂存区中的内容保存到本地仓库中。
 
@@ -1307,17 +1436,17 @@ git add .           # 添加所有更改到暂存区
 git commit -m "commit message"  # 提交暂存区的更改到本地仓库
 ```
 
-### 文件状态的转换
+##  文件状态的转换
 
-#### **未跟踪（Untracked）**
+### **未跟踪（Untracked）**
 
  新创建的文件最初是未跟踪的。它们存在于工作目录中，但没有被 Git 跟踪。新建文件后没有任何操作就是未跟踪
 
-#### **已跟踪（Tracked）**
+### **已跟踪（Tracked）**
 
 通过 `git add` 命令将未跟踪的文件添加到暂存区后，文件变为已跟踪状态。
 
-#### **已修改（Modified）**
+### **已修改（Modified）**
 
  对已跟踪的文件进行更改后，这些更改会显示为已修改状态，但这些更改还未添加到暂存区。
 
@@ -1326,10 +1455,10 @@ echo "Hello, World!" > newfile.txt  # 修改文件
 git status                          # 查看状态，显示 newfile.txt 已修改
 ```
 
-#### **已暂存（Staged）**
+### **已暂存（Staged）**
 
 使用 `git add` 命令将修改过的文件添加到暂存区后，文件进入已暂存状态，等待提交。
 
-#### **已提交（Committed）**
+### **已提交（Committed）**
 
 使用 `git commit` 命令将暂存区的更改提交到本地仓库后，这些更改被记录下来，文件状态返回为已跟踪状态。
