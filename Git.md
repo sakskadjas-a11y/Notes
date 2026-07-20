@@ -493,3 +493,99 @@ git commit -am #（设置-a参数后不用git add 直接提交）
 
 #### 删除文件 git rm
 
+git rm 用于删除文件
+
+1. 将文件从暂存区和工作区中删除：
+
+```
+git rm <file>
+```
+
+2.强行从暂存区和工作区中删除修改后的文件：
+
+```
+git rm -f <file>
+```
+
+3.把文件从暂存区移除，但仍在工作目录中（仅在跟踪清单中删除）
+
+```
+git rm --cached <file>
+```
+
+####  移动或重命名文件 git mv
+
+git mv 命令用于移动或重命名一个文件、目录或软连接。
+
+```
+git mv [file] [newfile]
+```
+
+如果新文件名已经存在，但还是要重命名它，可以使用 **-f** 参数：
+
+```
+git mv -f [file] [newfile]
+```
+
+#### 提交时附加注释 git notes
+
+允许用户将附加注释添加到提交中
+
+```
+git notes <subcommand> [options] [arguments]
+```
+
+- **`<subcommand>`**：具体的操作子命令（如 `add`, `show`, `list`, `remove`, `edit`, `merge` 等）。
+- **`[options]`**：命令的选项或参数。
+- **`[arguments]`**：命令的附加参数，如提交哈希值等。
+
+#####  1.git notes add
+
+**将新的注释添加到提交中。**
+
+- **`-m`**：指定注释的内容。
+
+- **`<commit-hash>`**：指定要添加注释的提交（可选，默认为当前提交）。
+
+	```
+	# 添加注释到当前提交
+	git notes add -m "This commit fixes the login bug"
+	
+	# 添加注释到特定提交
+	git notes add -m "Added new feature X" <commit-hash>
+	```
+
+#####  2.git notes show
+
+**显示提交的注释。**
+
+- **`<commit-hash>`**：指定要显示注释的提交（可选，默认为当前提交）。
+
+##### 3.git notes list
+
+**列出当前分支上所有提交的注释。**
+
+##### 4.git notes remove
+
+**删除提交的注释。**
+
+```
+git notes remove <commit-hash>
+```
+
+##### **5.git notes edit**
+
+**编辑提交的注释。与 `git notes add` 类似，但在编辑模式下打开默认编辑器进行注释编辑。**
+
+##### **`6.git notes merge`**
+
+**合并不同的注释记录**。
+
+##### **`7.refs/notes/*`**
+
+**用于指定注释的引用路径**。用于推送和拉取注释。
+
+```
+# 推送注释到远程仓库
+git push origin refs/notes/*
+```
