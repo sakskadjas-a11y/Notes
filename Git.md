@@ -387,9 +387,7 @@ Changes to be committed:
 
 在修改后没有放到暂存区时候即没有执行 `git add`，第一列是红色的M，执行 `git add`后变成绿色的M
 
-
-
-####  查看修改内容 git diff
+#### 查看修改内容 git diff
 
  git diff 命令显示已写入暂存区和已经被修改但尚未写入暂存区文件的区别，即比较文件在暂存区与工作区的差异
 
@@ -416,4 +414,82 @@ Changes to be committed:
 | `/关键词` | 搜索关键词         |
 | `n`       | 跳到下一个搜索结果 |
 | `N`       | 跳到上一个搜索结果 |
+
+#### 使用外部工具查看修改内容 git difftool
+
+`git difftool` 命令是 git diff 命令的一个扩展，提供了更直观的可视化工具来解决文件之间的差异。适用于那些更喜欢使用图形化工具而不是命令行工具来处理文件差异的用户。
+
+##### 基本语法
+
+```shell
+git difftool [<options>] [<commit> [<path>...]]
+```
+
+- **`<commit>`**：指定要比较的提交，默认为当前工作目录的状态。
+- **`<path>`**：指定要比较的文件路径。
+
+**常用选项和用法:**
+
+| **选项**               | **说明**                                                     | **用法示例**                        |
+| :--------------------- | :----------------------------------------------------------- | :---------------------------------- |
+| `--tool=<tool>`        | 指定使用的外部差异工具。默认情况下，Git 使用配置的默认差异工具。 | `git difftool --tool=meld`          |
+| `--tool-help`          | 显示可用的差异工具列表。                                     | `git difftool --tool-help`          |
+| `--dir-diff`           | 在目录中进行比较，而不是逐个文件。                           | `git difftool --dir-diff`           |
+| `--no-prompt`          | 跳过对每个文件的确认提示，自动使用工具查看差异。             | `git difftool --no-prompt`          |
+| `--staged`             | 比较已暂存的更改与上一个提交之间的差异。                     | `git difftool --staged`             |
+| `--cached`             | 与 `--staged` 相同，用于比较已缓存的更改与上一个提交的差异。 | `git difftool --cached`             |
+| `--merge`              | 用于合并工具，处理冲突时查看差异。                           | `git difftool --merge`              |
+| `--find-copies`        | 查找文件复制和移动。                                         | `git difftool --find-copies`        |
+| `--find-copies-harder` | 更加严格地查找文件复制和移动。                               | `git difftool --find-copies-harder` |
+
+#### 比较两个提交范围之间的差异 git range - diff
+
+```
+git range-diff <old-range> <new-range>
+```
+
+- **`<old-range>`**：旧的提交范围或分支。
+- **`<new-range>`**：新的提交范围或分支。
+
+#####  常见用法
+
+**1、比较两个提交范围**
+
+比较 branch1 的提交范围与 branch2 的提交范围之间的差异：
+
+```
+git range-diff branch1 branch2
+```
+
+示例：
+
+```
+git range-diff feature/old-branch feature/new-branch
+```
+
+**2、比较两个提交系列**
+
+比较两个提交系列的差异，查看在特定时间段内的变更：
+
+```
+git range-diff <start-old>..<end-old> <start-new>..<end-new>
+```
+
+示例：
+
+```
+git range-diff HEAD~10..HEAD~5 HEAD~5..HEAD
+```
+
+HEAD 10..HEAD~5 表示旧的提交范围，HEAD~5..HEAD 表示新的提交范围。
+
+####  将暂存区内容添加到本地仓库中 git commit
+
+```
+git commit -m [message]
+git commit [file1] [file2] ... -m [message]（提交暂存区指定文件到仓库区）
+git commit -am #（设置-a参数后不用git add 直接提交）
+```
+
+#### 删除文件 git rm
 
