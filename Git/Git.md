@@ -584,6 +584,13 @@ git rm -f <file>
 git rm --cached <file>
 ```
 
+4.想把远程和本地的文件夹删除
+
+```shell
+git rm -r <文件夹路径> #远程和本地的都删除
+git rm -r --cached <文件夹路径> #只删除远程，本地保留
+```
+
 ####  移动或重命名文件 git mv
 
 git mv 命令用于移动或重命名一个文件、目录或软连接。
